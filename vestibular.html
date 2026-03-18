@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vestibular | UNIXP – University Experience</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.0.3/src/index.js" defer></script>
+  <style>
+    /* ── STEPS ── */
+    .steps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+    .steps-grid::before {
+      content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 2px;
+      background: linear-gradient(90deg, var(--red), rgba(212,43,43,0.2));
+      z-index: 0;
+    }
+    .step-item { text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+    .step-num {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--white); border: 3px solid var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--red);
+      margin: 0 auto 20px;
+      transition: var(--transition);
+    }
+    .step-item:hover .step-num { background: var(--red); color: var(--white); }
+    .step-item h4 { font-size: 17px; margin-bottom: 8px; }
+    .step-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── METHODS ── */
+    .method-card {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg); padding: 32px; transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .method-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: var(--gray-200); transition: background 0.3s;
+    }
+    .method-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .method-card:hover::before { background: var(--red); }
+    .method-icon {
+      width: 56px; height: 56px; border-radius: var(--radius);
+      background: var(--red-muted); color: var(--red); font-size: 26px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; transition: var(--transition);
+    }
+    .method-card:hover .method-icon { background: var(--red); color: var(--white); }
+    .method-card h4 { font-size: 19px; margin-bottom: 10px; }
+    .method-card p { color: var(--text-secondary); font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
+    .method-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 600;
+      background: var(--gray-50); color: var(--text-muted); font-family: var(--font-display);
+      margin-bottom: 20px;
+    }
+
+    /* ── ENROLL FORM ── */
+    .enroll-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .enroll-form-card {
+      background: var(--white); border-radius: var(--radius-xl);
+      padding: 40px; box-shadow: var(--shadow-lg);
+      border: 1px solid var(--gray-200);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--text-primary); margin-bottom: 7px; font-family: var(--font-display);
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%; padding: 12px 16px;
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 15px; color: var(--text-primary);
+      background: var(--white); transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--red); }
+    .form-group input::placeholder { color: var(--text-muted); }
+    .form-note { font-size: 12.5px; color: var(--text-muted); margin-top: 12px; }
+
+    /* ── STATS ── */
+    .vest-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .vest-stat {
+      background: var(--dark-2); border-radius: var(--radius-lg);
+      padding: 32px; text-align: center;
+    }
+    .vest-stat .n {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 48px; color: var(--red); letter-spacing: -0.03em; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .vest-stat .lbl { font-size: 14px; color: rgba(255,255,255,.5); }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border-bottom: 1px solid var(--gray-200); overflow: hidden;
+    }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; cursor: pointer; font-weight: 600; font-size: 16px;
+      font-family: var(--font-display); transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--red); }
+    .faq-icon { font-size: 20px; color: var(--red); transition: transform 0.3s; flex-shrink: 0; }
+    .faq-answer {
+      font-size: 15px; color: var(--text-secondary); line-height: 1.7;
+      max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding-bottom: 20px; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    @media (max-width: 768px) {
+      .steps-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .steps-grid::before { display: none; }
+      .enroll-split { grid-template-columns: 1fr; gap: 40px; }
+      .vest-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav scrolled" id="mainNav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <span class="logo-tagline">University Experience</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+        <li class="nav-item"><a href="sobre.html" class="nav-link">Sobre</a></li>
+        <li class="nav-item"><a href="cursos.html" class="nav-link">Cursos</a></li>
+        <li class="nav-item">
+          <a href="vestibular.html" class="nav-link active">Vestibular <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="#inscricao">Inscrição</a>
+            <a href="#formas">Formas de Ingresso</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="biblioteca.html" class="nav-link">Biblioteca</a></li>
+        <li class="nav-item"><a href="multimidia.html" class="nav-link">Multimídia</a></li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Acessos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="https://unifuturo.edu.br/virtual_novo/login.php" target="_blank" rel="noopener">Área do Aluno</a>
+            <a href="https://unifuturo.edu.br/candidato/" target="_blank" rel="noopener">Área do Candidato</a>
+            <a href="https://acadmais.unifuturo.edu.br/sys/public/" target="_blank" rel="noopener">Área do Professor</a>
+            <a href="https://pesf.com.br/estudanteVirtual/login.php" target="_blank" rel="noopener">PESF</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="aurora.html" class="nav-link">Projeto Aurora</a></li>
+        <li class="nav-item"><a href="contato.html" class="nav-link">Contato</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#inscricao" class="btn btn-primary btn-sm">Inscreva-se</a>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb animate-fade-in">
+        <a href="index.html">Início</a>
+        <span class="sep"><i class="ph ph-caret-right"></i></span>
+        <span>Vestibular</span>
+      </div>
+      <h1 class="animate-fade-up delay-1">Sua jornada começa <span class="text-red">aqui.</span></h1>
+      <p class="animate-fade-up delay-2">Inscreva-se em um dos nossos cursos e dê o próximo passo na sua carreira. Processo simples, rápido e 100% online.</p>
+      <div style="margin-top:32px;" class="animate-fade-up delay-3">
+        <a href="#inscricao" class="btn btn-primary btn-lg">Fazer inscrição <i class="ph ph-arrow-right arrow"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section-sm" style="background:var(--dark-2);padding:56px 0;">
+    <div class="container">
+      <div class="vest-stats">
+        <div class="vest-stat animate-fade-up delay-1">
+          <div class="n">95<span style="font-size:32px;color:rgba(212,43,43,.6)">%</span></div>
+          <div class="lbl">Taxa de aprovação dos inscritos</div>
+        </div>
+        <div class="vest-stat animate-fade-up delay-2">
+          <div class="n">150<span style="font-size:32px;color:rgba(212,43,43,.6)">+</span></div>
+          <div class="lbl">Novas turmas por semestre</div>
+        </div>
+        <div class="vest-stat animate-fade-up delay-3">
+          <div class="n">5</div>
+          <div class="lbl">Formas de ingresso disponíveis</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header center animate-fade-up">
+        <span class="label">Como funciona</span>
+        <div class="divider"></div>
+        <h2>4 passos para começar</h2>
+        <p>Processo simples e transparente. Do cadastro ao início das aulas em menos de uma semana.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-item animate-fade-up delay-1">
+          <div class="step-num">1</div>
+          <h4>Escolha seu curso</h4>
+          <p>Navegue pelo catálogo e encontre o curso ideal para seus objetivos profissionais.</p>
+        </div>
+        <div class="step-item animate-fade-up delay-2">
+          <div class="step-num">2</div>
+          <h4>Preencha o formulário</h4>
+          <p>Dados básicos e escolha da forma de ingresso. Rápido e 100% online.</p>
+        </div>
+        <div class="step-item animate-fade-up delay-3">
+          <div class="step-num">3</div>
+          <h4>Envie documentos</h4>
+          <p>Upload dos documentos necessários diretamente pela plataforma UniConect.</p>
+        </div>
+        <div class="step-item animate-fade-up delay-4">
+          <div class="step-num">4</div>
+          <h4>Comece as aulas</h4>
+          <p>Após confirmação da matrícula, acesse a plataforma e inicie sua jornada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTRY METHODS -->
+  <section class="section" id="formas">
+    <div class="container">
+      <div class="section-header animate-fade-up">
+        <span class="label">Ingresso</span>
+        <div class="divider"></div>
+        <h2>Formas de Ingresso</h2>
+        <p>Diversas formas de ingresso para atender perfis diferentes de candidatos.</p>
+      </div>
+      <div class="grid-3">
+        <div class="method-card animate-fade-up delay-1">
+          <div class="method-icon"><i class="ph ph-exam"></i></div>
+          <div class="method-badge"><i class="ph ph-check"></i> Disponível</div>
+          <h4>ENEM</h4>
+          <p>Use sua nota do ENEM para ingressar diretamente em qualquer curso de graduação. Processo simplificado, sem prova adicional.</p>
+          <a href="#checkout" class="btn btn-primary">Inscrever via ENEM <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+        <div class="method-card animate-fade-up delay-2">
+          <div class="method-icon"><i class="ph ph-file-text"></i></div>
+          <div class="method-badge"><i class="ph ph-check"></i> Disponível</div>
+          <h4>Vestibular Online</h4>
+          <p>Prova realizada 100% online, com questões de múltipla escolha e redação. Resultado em até 48 horas.</p>
+          <a href="#checkout" class="btn btn-primary">Fazer vestibular <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+        <div class="method-card animate-fade-up delay-3">
+          <div class="method-icon"><i class="ph ph-transfer"></i></div>
+          <div class="method-badge"><i class="ph ph-check"></i> Disponível</div>
+          <h4>Transferência</h4>
+          <p>Aluno de outra instituição? Transfira sua matrícula com aproveitamento das disciplinas já cursadas.</p>
+          <a href="#checkout" class="btn btn-primary">Solicitar transferência <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+        <div class="method-card animate-fade-up delay-4">
+          <div class="method-icon"><i class="ph ph-graduation-cap"></i></div>
+          <div class="method-badge"><i class="ph ph-check"></i> Disponível</div>
+          <h4>Segunda Graduação</h4>
+          <p>Já tem uma graduação? Ingresse em um segundo curso com processo simplificado e possibilidade de aproveitamento de disciplinas.</p>
+          <a href="#checkout" class="btn btn-primary">Inscrever-se <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+        <div class="method-card animate-fade-up delay-5">
+          <div class="method-icon"><i class="ph ph-globe"></i></div>
+          <div class="method-badge"><i class="ph ph-check"></i> Disponível</div>
+          <h4>Programa Internacional ABQUALIS</h4>
+          <p>Ingresso com bolsa internacional para estudantes que atendem os requisitos do programa de internacionalização da Unifuturo.</p>
+          <a href="#checkout" class="btn btn-primary">Saber mais <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENROLL FORM -->
+  <section class="section section-gray" id="inscricao">
+    <div class="container">
+      <div class="enroll-split">
+        <div class="animate-fade-up">
+          <span class="label">Inscrição</span>
+          <div class="divider"></div>
+          <h2>Solicite sua inscrição</h2>
+          <p style="color:var(--text-secondary);font-size:16px;line-height:1.75;margin-top:16px;margin-bottom:32px;">
+            Preencha seus dados e nossa equipe entrará em contato em até 24 horas para dar continuidade ao processo de matrícula.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;">
+                <i class="ph ph-phone"></i>
+              </div>
+              <div>
+                <div style="font-weight:600;font-size:15px;">Atendimento por telefone</div>
+                <div style="color:var(--text-secondary);font-size:14px;">+55 (83) 9 9691.9526</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;">
+                <i class="ph ph-whatsapp-logo"></i>
+              </div>
+              <div>
+                <div style="font-weight:600;font-size:15px;">WhatsApp — Equipe Comercial</div>
+                <div style="color:var(--text-secondary);font-size:14px;">Atendimento de seg a sex, 8h às 20h</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;">
+                <i class="ph ph-envelope"></i>
+              </div>
+              <div>
+                <div style="font-weight:600;font-size:15px;">E-mail</div>
+                <div style="color:var(--text-secondary);font-size:14px;">comercial@unifuturo.edu.br</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="enroll-form-card animate-fade-up delay-2">
+          <h3 style="margin-bottom:24px;">Preencha seus dados</h3>
+          <form action="#checkout" method="GET">
+            <div class="form-group">
+              <label>Nome completo</label>
+              <input type="text" placeholder="Seu nome completo" required>
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+              <label>Telefone / WhatsApp</label>
+              <input type="tel" placeholder="(XX) 9 XXXX-XXXX" required>
+            </div>
+            <div class="form-group">
+              <label>Curso de interesse</label>
+              <select>
+                <option value="">Selecione um curso</option>
+                <optgroup label="Graduação">
+                  <option>Ciências Contábeis</option>
+                  <option>Serviço Social</option>
+                  <option>Pedagogia</option>
+                  <option>Administração</option>
+                </optgroup>
+                <optgroup label="Pós-Graduação">
+                  <option>Enfermagem em Emergência e UTI</option>
+                  <option>Pre-Master PIBE 30</option>
+                  <option>Pre-Master PIBE 36</option>
+                  <option>Neurociências Aplicadas</option>
+                  <option>MBA em Gestão e Marketing</option>
+                </optgroup>
+                <optgroup label="Outros">
+                  <option>Extensão / Formação</option>
+                  <option>Star Lessons da Finlândia</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Forma de ingresso</label>
+              <select>
+                <option value="">Selecione</option>
+                <option>ENEM</option>
+                <option>Vestibular Online</option>
+                <option>Transferência</option>
+                <option>Segunda Graduação</option>
+                <option>Programa ABQUALIS</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;font-size:16px;padding:16px;">
+              Solicitar inscrição <i class="ph ph-arrow-right arrow"></i>
+            </button>
+            <p class="form-note" style="text-align:center;margin-top:12px;">
+              Ao enviar você concorda com nossa <a href="#" style="color:var(--red)">política de privacidade</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container" style="max-width:760px;">
+      <div class="section-header center animate-fade-up">
+        <span class="label">Dúvidas Frequentes</span>
+        <div class="divider"></div>
+        <h2>Perguntas & Respostas</h2>
+      </div>
+      <div class="animate-fade-up delay-1">
+        <div class="faq-item open">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Quais documentos preciso para me matricular?
+            <i class="ph ph-plus faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            RG ou CNH (frente e verso), CPF, comprovante de residência recente, histórico escolar do Ensino Médio (para graduação) ou certificado de graduação (para pós-graduação). Todos os documentos podem ser enviados em formato digital pela plataforma.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Os cursos são reconhecidos pelo MEC?
+            <i class="ph ph-plus faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Sim. A Unifuturo é credenciada pelo Ministério da Educação do Brasil desde 2008. Todos os cursos de graduação são autorizados pelo MEC e podem ser verificados no portal e-MEC.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Como funcionam as aulas no formato EAD Híbrido?
+            <i class="ph ph-plus faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            As aulas são transmitidas ao vivo pela plataforma UniConect em dias e horários predefinidos. É possível interagir com o professor em tempo real. Todas as aulas ficam gravadas e disponíveis por 7 dias para revisão.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Posso aproveitar disciplinas de outra instituição?
+            <i class="ph ph-plus faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Sim. No caso de transferência ou segunda graduação, realizamos análise curricular e aproveitamos as disciplinas que possuem compatibilidade de conteúdo com o curso escolhido na Unifuturo.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Existe possibilidade de bolsa ou desconto?
+            <i class="ph ph-plus faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Sim. Além do Programa ABQUALIS de bolsas internacionais, a Unifuturo oferece descontos para servidores públicos, grupos familiares e convênios institucionais. Entre em contato com nossa equipe comercial para saber as condições disponíveis.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <div class="logo-tagline">UNIVERSITY EXPERIENCE</div>
+        <p>Educando para uma cultura de diálogo e cooperação, com presença em 11 estados brasileiros e 4 países.</p>
+        <div class="footer-social">
+          <a href="#"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="#"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Vestibular</h5>
+        <ul>
+          <li><a href="#inscricao">Fazer inscrição</a></li>
+          <li><a href="#formas">Formas de ingresso</a></li>
+          <li><a href="cursos.html">Ver todos os cursos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Acadêmico</h5>
+        <ul>
+          <li><a href="cursos.html#graduacao">Graduação</a></li>
+          <li><a href="cursos.html#posgraduacao">Pós-Graduação</a></li>
+          <li><a href="cursos.html#extensao">Extensão</a></li>
+          <li><a href="biblioteca.html">Biblioteca</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contato</h5>
+        <div class="footer-contact-item"><i class="ph ph-map-pin icon"></i><span>Shopping Tambiá, Piso E2, João Pessoa – PB</span></div>
+        <div class="footer-contact-item"><i class="ph ph-phone icon"></i><span>+55 (83) 9 9691.9526</span></div>
+        <div class="footer-contact-item"><i class="ph ph-envelope icon"></i><span>comercial@unifuturo.edu.br</span></div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2008–2026 Unifuturo Faculdades. Todos os direitos reservados.</span>
+      <span>Credenciada pelo MEC · Verifique no e-MEC</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+    document.getElementById('navToggle')?.addEventListener('click', () =>
+      document.getElementById('navLinks')?.classList.toggle('mobile-open'));
+
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      item.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

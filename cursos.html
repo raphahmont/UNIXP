@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursos | UNIXP – University Experience</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.0.3/src/index.js" defer></script>
+  <style>
+    /* ── FILTER TABS ── */
+    .filter-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      padding: 10px 20px; border-radius: 100px;
+      border: 1.5px solid var(--gray-200);
+      font-size: 13.5px; font-weight: 600; font-family: var(--font-display);
+      color: var(--text-secondary); background: var(--white);
+      cursor: pointer; transition: var(--transition);
+    }
+    .filter-btn:hover { border-color: var(--red); color: var(--red); }
+    .filter-btn.active {
+      background: var(--red); border-color: var(--red);
+      color: var(--white); box-shadow: var(--shadow-red);
+    }
+
+    /* ── COURSE SECTION ── */
+    .course-section { margin-bottom: 80px; }
+    .course-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .course-section-header h3 {
+      font-size: 24px; display: flex; align-items: center; gap: 12px;
+    }
+    .section-tag {
+      padding: 4px 14px; border-radius: 100px;
+      background: var(--red-muted); color: var(--red);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; font-family: var(--font-display);
+    }
+    .course-count {
+      font-size: 13px; color: var(--text-muted); font-weight: 400;
+    }
+
+    /* ── COURSE CARD ── */
+    .c-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200); overflow: hidden;
+      transition: var(--transition); display: flex; flex-direction: column;
+    }
+    .c-card:hover { border-color: transparent; box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .c-card-img { position: relative; height: 190px; overflow: hidden; flex-shrink: 0; }
+    .c-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+    .c-card:hover .c-card-img img { transform: scale(1.06); }
+    .c-card-img .modality {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(12,12,21,0.75); backdrop-filter: blur(8px);
+      color: rgba(255,255,255,.85); padding: 4px 10px;
+      border-radius: 100px; font-size: 11px; font-weight: 600;
+    }
+    .c-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+    .c-body h4 { font-size: 16px; line-height: 1.4; margin-bottom: 8px; }
+    .c-body p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+    .c-meta {
+      display: flex; gap: 12px; margin-top: 14px;
+      font-size: 12.5px; color: var(--text-muted);
+      padding-top: 14px; border-top: 1px solid var(--gray-100);
+    }
+    .c-meta span { display: flex; align-items: center; gap: 5px; }
+    .c-body .btn { margin-top: 16px; width: 100%; justify-content: center; }
+
+    /* ── AREA CHIPS ── */
+    .areas-row {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px;
+    }
+    .area-chip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: var(--radius);
+      background: var(--white); border: 1px solid var(--gray-200);
+      font-size: 14px; font-weight: 500; color: var(--text-primary);
+      transition: var(--transition); cursor: pointer;
+    }
+    .area-chip i { color: var(--red); font-size: 18px; }
+    .area-chip:hover { border-color: var(--red); background: var(--red-muted); }
+
+    /* ── ENROLLMENT BANNER ── */
+    .enroll-banner {
+      background: var(--red); border-radius: var(--radius-xl);
+      padding: 56px 48px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    }
+    .enroll-banner::before {
+      content: ''; position: absolute; right: -60px; top: -60px;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: rgba(255,255,255,.06);
+    }
+    .enroll-banner::after {
+      content: ''; position: absolute; right: 100px; bottom: -80px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+    .enroll-banner h3 { color: var(--white); font-size: 28px; margin-bottom: 8px; }
+    .enroll-banner p { color: rgba(255,255,255,.75); font-size: 16px; }
+    .enroll-banner .actions { display: flex; gap: 16px; flex-wrap: wrap; flex-shrink: 0; position: relative; z-index: 1; }
+
+    @media (max-width: 768px) {
+      .enroll-banner { flex-direction: column; padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav scrolled" id="mainNav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <span class="logo-tagline">University Experience</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+        <li class="nav-item">
+          <a href="sobre.html" class="nav-link">Sobre <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="sobre.html#institucional">Institucional</a>
+            <a href="sobre.html#estrutura">Estrutura Organizacional</a>
+            <a href="sobre.html#imprensa">Sala de Imprensa</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="cursos.html" class="nav-link active">Cursos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="#graduacao">Graduação</a>
+            <a href="#posgraduacao">Pós-Graduação</a>
+            <a href="#extensao">Extensão Universitária</a>
+            <a href="#preparatorios">Preparatórios</a>
+            <a href="#formacao">Formação</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="vestibular.html" class="nav-link">Vestibular <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="vestibular.html#inscricao">Inscrição</a>
+            <a href="vestibular.html#formas">Formas de Ingresso</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="biblioteca.html" class="nav-link">Biblioteca</a></li>
+        <li class="nav-item">
+          <a href="multimidia.html" class="nav-link">Multimídia <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="multimidia.html#anais">Anais de Congresso</a>
+            <a href="multimidia.html#revista">Revista EDUCERE</a>
+            <a href="multimidia.html#repositorio">Repositório Científico</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Acessos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="https://unifuturo.edu.br/virtual_novo/login.php" target="_blank" rel="noopener">Área do Aluno</a>
+            <a href="https://unifuturo.edu.br/candidato/" target="_blank" rel="noopener">Área do Candidato</a>
+            <a href="https://acadmais.unifuturo.edu.br/sys/public/" target="_blank" rel="noopener">Área do Professor</a>
+            <a href="https://pesf.com.br/estudanteVirtual/login.php" target="_blank" rel="noopener">PESF</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="aurora.html" class="nav-link">Projeto Aurora</a></li>
+        <li class="nav-item"><a href="contato.html" class="nav-link">Contato</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="vestibular.html" class="btn btn-primary btn-sm">Inscreva-se</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb animate-fade-in">
+        <a href="index.html">Início</a>
+        <span class="sep"><i class="ph ph-caret-right"></i></span>
+        <span>Cursos</span>
+      </div>
+      <h1 class="animate-fade-up delay-1">Catálogo <span class="text-red">Acadêmico</span></h1>
+      <p class="animate-fade-up delay-2">Mais de 50 cursos de graduação, pós-graduação, extensão e formação — todos no formato EAD Híbrido com aulas ao vivo pela plataforma UniConect.</p>
+    </div>
+  </section>
+
+  <!-- AREAS -->
+  <section class="section-sm section-gray" style="padding:40px 0;">
+    <div class="container">
+      <div class="areas-row animate-fade-up">
+        <div class="area-chip"><i class="ph ph-heartbeat"></i> Saúde</div>
+        <div class="area-chip"><i class="ph ph-chart-line"></i> Administração</div>
+        <div class="area-chip"><i class="ph ph-megaphone"></i> Marketing</div>
+        <div class="area-chip"><i class="ph ph-users"></i> Serviço Social</div>
+        <div class="area-chip"><i class="ph ph-calculator"></i> Ciências Contábeis</div>
+        <div class="area-chip"><i class="ph ph-scales"></i> Direito</div>
+        <div class="area-chip"><i class="ph ph-brain"></i> Neurociências</div>
+        <div class="area-chip"><i class="ph ph-chalkboard-teacher"></i> Pedagogia</div>
+        <div class="area-chip"><i class="ph ph-tooth"></i> Odontologia</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COURSES CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- GRADUAÇÃO -->
+      <div class="course-section" id="graduacao">
+        <div class="course-section-header">
+          <h3><span class="section-tag">Graduação</span> Bacharelados <span class="course-count">· 4 cursos</span></h3>
+          <a href="vestibular.html" class="btn btn-outline-dark btn-sm">Ver vestibular <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+        <div class="grid-3">
+          <div class="c-card animate-fade-up delay-1">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" alt="Ciências Contábeis">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Ciências Contábeis</span>
+              <h4>Bacharelado em Ciências Contábeis</h4>
+              <p>Formação completa para atuar no mercado financeiro e contábil, com currículo alinhado às demandas globais e certificações internacionais.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 4 anos</span>
+                <span><i class="ph ph-certificate"></i> Bacharelado</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-2">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" alt="Serviço Social">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Serviço Social</span>
+              <h4>Bacharelado em Serviço Social</h4>
+              <p>Prepare-se para intervir em contextos sociais complexos com formação humanista, crítica e voltada para a transformação social.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 4 anos</span>
+                <span><i class="ph ph-certificate"></i> Bacharelado</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-3">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" alt="Pedagogia">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Pedagogia</span>
+              <h4>Licenciatura em Pedagogia</h4>
+              <p>Formação de professores e gestores educacionais com foco em metodologias inovadoras, inclusão e educação para o século XXI.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 4 anos</span>
+                <span><i class="ph ph-certificate"></i> Licenciatura</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-4">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" alt="Administração">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Administração</span>
+              <h4>Bacharelado em Administração</h4>
+              <p>Desenvolva competências de liderança, estratégia e gestão para atuar em empresas nacionais e internacionais em cenários dinâmicos.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 4 anos</span>
+                <span><i class="ph ph-certificate"></i> Bacharelado</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PÓS-GRADUAÇÃO -->
+      <div class="course-section" id="posgraduacao">
+        <div class="course-section-header">
+          <h3><span class="section-tag">Pós-Graduação</span> Especializações e Mestrados <span class="course-count">· 5 cursos</span></h3>
+        </div>
+        <div class="grid-3">
+          <div class="c-card animate-fade-up delay-1">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80" alt="Enfermagem">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Saúde</span>
+              <h4>Pós-Graduação em Enfermagem em Emergência, Urgência e UTI</h4>
+              <p>Especialização voltada para atuação em ambientes hospitalares críticos, com foco em urgência, emergência e cuidados intensivos.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 18 meses</span>
+                <span><i class="ph ph-certificate"></i> Especialização</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-2">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1434626881859-194d67b2b86f?auto=format&fit=crop&w=600&q=80" alt="Pre-Master">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Preparatório</span>
+              <h4>Pre-Master Preparatório I PIBE 30</h4>
+              <p>Curso preparatório para ingresso em programas de mestrado internacionais, com 30 créditos reconhecidos por universidades parceiras.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 12 meses</span>
+                <span><i class="ph ph-certificate"></i> Pós-Grad.</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-3">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Pre-Master 36">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Preparatório</span>
+              <h4>Pre-Master Preparatório I PIBE 36</h4>
+              <p>Versão ampliada do programa PIBE com 36 créditos, oferecendo maior aprofundamento acadêmico e mais oportunidades de reconhecimento internacional.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 18 meses</span>
+                <span><i class="ph ph-certificate"></i> Pós-Grad.</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-4">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=600&q=80" alt="Neurociências">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Saúde</span>
+              <h4>Pós-Graduação em Neurociências Aplicadas</h4>
+              <p>Especialização voltada para profissionais da saúde e educação que desejam aprofundar conhecimentos em neurociências e suas aplicações clínicas e pedagógicas.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 18 meses</span>
+                <span><i class="ph ph-certificate"></i> Especialização</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-5">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80" alt="Gestão">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Gestão</span>
+              <h4>MBA em Gestão Empresarial e Marketing</h4>
+              <p>Programa de MBA que combina gestão estratégica com marketing digital, preparando líderes para o mercado global competitivo.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 18 meses</span>
+                <span><i class="ph ph-certificate"></i> MBA</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXTENSÃO -->
+      <div class="course-section" id="extensao">
+        <div class="course-section-header">
+          <h3><span class="section-tag">Extensão</span> Cursos de Extensão Universitária <span class="course-count">· 3 cursos</span></h3>
+        </div>
+        <div class="grid-3">
+          <div class="c-card animate-fade-up delay-1">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1532094349884-543559059da0?auto=format&fit=crop&w=600&q=80" alt="Odontologia">
+              <span class="modality">Presencial</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Odontologia</span>
+              <h4>Especialização em Alinhadores Ortodônticos</h4>
+              <p>Curso prático e teórico para profissionais de odontologia que desejam se especializar no uso de alinhadores transparentes na prática clínica.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 6 meses</span>
+                <span><i class="ph ph-certificate"></i> Extensão</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-2">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?auto=format&fit=crop&w=600&q=80" alt="Metodologia">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Educação</span>
+              <h4>Metodologias Ativas e Educação Híbrida</h4>
+              <p>Capacitação para docentes e gestores educacionais sobre metodologias ativas de ensino e a integração de ferramentas digitais no processo pedagógico.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 3 meses</span>
+                <span><i class="ph ph-certificate"></i> Extensão</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-3">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=600&q=80" alt="Internacional">
+              <span class="modality">EAD</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Internacional</span>
+              <h4>Internacionalização da Carreira Acadêmica</h4>
+              <p>Prepara pesquisadores e professores para publicar internacionalmente, participar de congressos globais e construir redes acadêmicas internacionais.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 3 meses</span>
+                <span><i class="ph ph-certificate"></i> Extensão</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREPARATÓRIOS -->
+      <div class="course-section" id="preparatorios">
+        <div class="course-section-header">
+          <h3><span class="section-tag">Preparatórios</span> Cursos Preparatórios <span class="course-count">· 2 cursos</span></h3>
+        </div>
+        <div class="grid-3">
+          <div class="c-card animate-fade-up delay-1">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80" alt="ENEM">
+              <span class="modality">EAD</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Preparatório</span>
+              <h4>Preparatório para o ENEM</h4>
+              <p>Revisão completa dos conteúdos do ENEM com aulas ao vivo, simulados, banco de questões e acompanhamento pedagógico individualizado.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 6 meses</span>
+                <span><i class="ph ph-certificate"></i> Preparatório</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-2">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Vestibular">
+              <span class="modality">EAD</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Preparatório</span>
+              <h4>Preparatório para Vestibulares Específicos</h4>
+              <p>Preparação direcionada para vestibulares de universidades públicas federais e estaduais, com foco nos editais e perfil de cada instituição.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 4 meses</span>
+                <span><i class="ph ph-certificate"></i> Preparatório</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMAÇÃO -->
+      <div class="course-section" id="formacao">
+        <div class="course-section-header">
+          <h3><span class="section-tag">Formação</span> Programas de Formação <span class="course-count">· 2 cursos</span></h3>
+        </div>
+        <div class="grid-3">
+          <div class="c-card animate-fade-up delay-1">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80" alt="Formação Docente">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Formação</span>
+              <h4>Formação Pedagógica para Profissionais</h4>
+              <p>Permite que profissionais com nível superior em outras áreas obtenham habilitação para lecionar no Ensino Médio e Técnico.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 18 meses</span>
+                <span><i class="ph ph-certificate"></i> Formação</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+          <div class="c-card animate-fade-up delay-2">
+            <div class="c-card-img">
+              <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80" alt="Star Lessons">
+              <span class="modality">EAD Híbrido</span>
+            </div>
+            <div class="c-body">
+              <span class="card-tag">Internacional</span>
+              <h4>Star Lessons da Finlândia</h4>
+              <p>Programa exclusivo de formação baseado no modelo educacional finlandês, reconhecido como o melhor do mundo, aplicado ao contexto brasileiro.</p>
+              <div class="c-meta">
+                <span><i class="ph ph-clock"></i> 6 meses</span>
+                <span><i class="ph ph-certificate"></i> Formação</span>
+              </div>
+              <a href="#checkout" class="btn btn-primary">Inscreva-se <i class="ph ph-arrow-right arrow"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENROLLMENT BANNER -->
+      <div class="enroll-banner animate-fade-up">
+        <div>
+          <h3>Não encontrou o que procura?</h3>
+          <p>Fale com nossa equipe comercial e descubra todos os cursos disponíveis.</p>
+        </div>
+        <div class="actions">
+          <a href="vestibular.html" class="btn btn-dark btn-lg">Vestibular <i class="ph ph-arrow-right arrow"></i></a>
+          <a href="contato.html" class="btn btn-outline btn-lg">Fale conosco</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <div class="logo-tagline">UNIVERSITY EXPERIENCE</div>
+        <p>Educando para uma cultura de diálogo e cooperação, com presença em 11 estados brasileiros e 4 países.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="#" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Institucional</h5>
+        <ul>
+          <li><a href="sobre.html#institucional">Sobre a Unifuturo</a></li>
+          <li><a href="sobre.html#estrutura">Estrutura Organizacional</a></li>
+          <li><a href="sobre.html#imprensa">Sala de Imprensa</a></li>
+          <li><a href="#">Ouvidoria</a></li>
+          <li><a href="#">UNIO Internacional</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Acadêmico</h5>
+        <ul>
+          <li><a href="#graduacao">Graduação</a></li>
+          <li><a href="#posgraduacao">Pós-Graduação</a></li>
+          <li><a href="#extensao">Extensão</a></li>
+          <li><a href="#preparatorios">Preparatórios</a></li>
+          <li><a href="vestibular.html">Vestibular</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contato</h5>
+        <div class="footer-contact-item"><i class="ph ph-map-pin icon"></i><span>Shopping Tambiá, Piso E2, João Pessoa – PB</span></div>
+        <div class="footer-contact-item"><i class="ph ph-phone icon"></i><span>+55 (83) 9 9691.9526</span></div>
+        <div class="footer-contact-item"><i class="ph ph-envelope icon"></i><span>secretaria@unifuturo.edu.br</span></div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2008–2026 Unifuturo Faculdades. Todos os direitos reservados.</span>
+      <span>Credenciada pelo MEC · Verifique no e-MEC</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+    document.getElementById('navToggle')?.addEventListener('click', () =>
+      document.getElementById('navLinks')?.classList.toggle('mobile-open'));
+  </script>
+</body>
+</html>

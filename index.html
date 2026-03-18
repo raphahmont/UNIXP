@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Início | UNIXP – University Experience</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.0.3/src/index.js" defer></script>
+  <style>
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: var(--nav-height);
+      overflow: hidden;
+    }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(108deg, rgba(12,12,21,0.93) 0%, rgba(12,12,21,0.72) 55%, rgba(12,12,21,0.35) 100%);
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      padding: 80px var(--container-px);
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-content { max-width: 660px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 16px; border-radius: 100px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8); font-size: 12.5px; font-weight: 500;
+      margin-bottom: 28px;
+    }
+    .hero-badge i { color: var(--red); font-size: 15px; }
+    .hero-title { color: var(--white); margin-bottom: 20px; }
+    .hero-subtitle {
+      color: rgba(255,255,255,0.68); font-size: 17.5px;
+      line-height: 1.75; max-width: 500px; margin-bottom: 36px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; align-items: center;
+      margin-top: 64px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 24px 32px;
+      width: fit-content;
+    }
+    .hero-stat { display: flex; flex-direction: column; align-items: center; padding: 0 28px; }
+    .hero-stat-div { width: 1px; height: 36px; background: rgba(255,255,255,0.1); }
+    .stat-n {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 30px; color: var(--white); letter-spacing: -0.02em; line-height: 1;
+    }
+    .stat-n .plus { color: var(--red); }
+    .stat-l { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; font-weight: 500; }
+    .hero-scroll {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%); z-index: 1;
+      color: rgba(255,255,255,0.35);
+      animation: bounce 2s infinite;
+      font-size: 20px;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── FEATURES ── */
+    .feature-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      border: 1px solid var(--gray-200);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .feature-card:hover { border-color: transparent; box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .feature-card:hover::after { transform: scaleX(1); }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius);
+      background: var(--red-muted);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--red); font-size: 24px; margin-bottom: 20px;
+      transition: var(--transition);
+    }
+    .feature-card:hover .feature-icon { background: var(--red); color: var(--white); }
+    .feature-card h4 { margin-bottom: 10px; font-size: 17px; }
+    .feature-card p { color: var(--text-secondary); font-size: 14.5px; line-height: 1.65; }
+
+    /* ── ABOUT SPLIT ── */
+    .about-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-image { position: relative; }
+    .about-image img { width: 100%; height: 480px; object-fit: cover; border-radius: var(--radius-xl); }
+    .about-float {
+      position: absolute; bottom: 24px; left: 24px;
+      background: var(--red); color: var(--white);
+      padding: 12px 20px; border-radius: var(--radius);
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 600; font-size: 14px; font-family: var(--font-display);
+      box-shadow: 0 8px 24px rgba(212,43,43,0.4);
+    }
+    .about-text p { color: var(--text-secondary); font-size: 16px; line-height: 1.75; }
+
+    /* ── COURSE CARDS ── */
+    .course-img-wrap { position: relative; height: 220px; overflow: hidden; }
+    .course-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+    .card:hover .course-img-wrap img { transform: scale(1.05); }
+    .course-img-wrap .card-tag { position: absolute; top: 16px; left: 16px; margin: 0; }
+    .course-meta { display: flex; gap: 16px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+    .course-meta span { display: flex; align-items: center; gap: 5px; }
+
+    /* ── STATS BAR ── */
+    .stats-bar { background: var(--dark-2); padding: 56px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .stats-bar-grid { display: grid; grid-template-columns: repeat(5,1fr); }
+    .stats-bar-item {
+      text-align: center; padding: 16px 24px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .stats-bar-item:last-child { border-right: none; }
+    .stats-bar-item .n {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 42px; color: var(--red); letter-spacing: -0.03em; line-height: 1;
+    }
+    .stats-bar-item .n span { color: rgba(212,43,43,0.55); font-size: 30px; }
+    .stats-bar-item .lbl { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
+    /* ── NEWS ── */
+    .news-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      overflow: hidden; border: 1px solid var(--gray-200); transition: var(--transition);
+    }
+    .news-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: transparent; }
+    .news-img-wrap { position: relative; height: 200px; overflow: hidden; }
+    .news-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+    .news-card:hover .news-img-wrap img { transform: scale(1.05); }
+    .news-date {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.8); padding: 4px 12px;
+      border-radius: 100px; font-size: 12px;
+    }
+    .news-body { padding: 24px; }
+    .news-body h4 { margin: 8px 0 10px; font-size: 16px; line-height: 1.4; }
+    .news-body p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 16px; }
+    .news-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13.5px; font-weight: 600; color: var(--red); font-family: var(--font-display);
+      transition: gap 0.2s;
+    }
+    .news-link:hover { gap: 10px; }
+
+    /* ── PLATFORM ── */
+    .platform-sec {
+      background: var(--dark-2); padding: var(--section-py) 0;
+      position: relative; overflow: hidden;
+    }
+    .platform-sec::before {
+      content: ''; position: absolute;
+      top: -120px; right: -120px; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(212,43,43,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .platform-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .platform-text p { color: rgba(255,255,255,0.52); font-size: 16px; line-height: 1.75; margin-top: 20px; }
+    .platform-features { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .pf-item { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.68); font-size: 15px; }
+    .pf-item i { color: var(--red); font-size: 18px; flex-shrink: 0; }
+    .platform-visual { border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.4); }
+    .platform-visual img { width: 100%; height: 440px; object-fit: cover; }
+
+    /* ── CTA STRIP ── */
+    .cta-strip {
+      position: relative; background: var(--red); padding: 64px 0; overflow: hidden;
+    }
+    .cta-strip::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 10% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 90% 50%, rgba(0,0,0,0.15) 0%, transparent 60%);
+    }
+    .cta-inner {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;
+    }
+    .cta-inner h2 { color: var(--white); font-size: clamp(22px, 3vw, 36px); margin-bottom: 8px; }
+    .cta-inner p { color: rgba(255,255,255,0.75); font-size: 16px; }
+    .cta-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .about-split { grid-template-columns: 1fr; gap: 40px; }
+      .about-image img { height: 300px; }
+      .platform-inner { grid-template-columns: 1fr; gap: 40px; }
+      .platform-visual img { height: 260px; }
+      .stats-bar-grid { grid-template-columns: repeat(2,1fr); }
+      .stats-bar-item:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.07); }
+      .stats-bar-item:nth-child(5) { grid-column: 1/-1; border-right: none; }
+      .hero-stats { flex-wrap: wrap; padding: 20px; gap: 12px; }
+      .hero-stat { padding: 0 16px; }
+      .hero-stat-div { display: none; }
+      .cta-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="mainNav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <span class="logo-tagline">University Experience</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li class="nav-item"><a href="index.html" class="nav-link active">Início</a></li>
+        <li class="nav-item">
+          <a href="sobre.html" class="nav-link">Sobre <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="sobre.html#institucional">Institucional</a>
+            <a href="sobre.html#estrutura">Estrutura Organizacional</a>
+            <a href="sobre.html#imprensa">Sala de Imprensa</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="cursos.html" class="nav-link">Cursos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="cursos.html#graduacao">Graduação</a>
+            <a href="cursos.html#posgraduacao">Pós-Graduação</a>
+            <a href="cursos.html#extensao">Extensão Universitária</a>
+            <a href="cursos.html#preparatorios">Preparatórios</a>
+            <a href="cursos.html#formacao">Formação</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="vestibular.html" class="nav-link">Vestibular <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="vestibular.html#inscricao">Inscrição</a>
+            <a href="vestibular.html#formas">Formas de Ingresso</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="biblioteca.html" class="nav-link">Biblioteca</a></li>
+        <li class="nav-item">
+          <a href="multimidia.html" class="nav-link">Multimídia <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="multimidia.html#anais">Anais de Congresso</a>
+            <a href="multimidia.html#revista">Revista EDUCERE</a>
+            <a href="multimidia.html#repositorio">Repositório Científico</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Acessos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="https://unifuturo.edu.br/virtual_novo/login.php" target="_blank" rel="noopener">Área do Aluno</a>
+            <a href="https://unifuturo.edu.br/candidato/" target="_blank" rel="noopener">Área do Candidato</a>
+            <a href="https://acadmais.unifuturo.edu.br/sys/public/" target="_blank" rel="noopener">Área do Professor</a>
+            <a href="https://pesf.com.br/estudanteVirtual/login.php" target="_blank" rel="noopener">PESF</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="aurora.html" class="nav-link">Projeto Aurora</a></li>
+        <li class="nav-item"><a href="contato.html" class="nav-link">Contato</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="vestibular.html" class="btn btn-primary btn-sm">Inscreva-se</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80" alt="Campus Universitário" class="hero-img">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge animate-fade-up delay-1">
+          <i class="ph ph-seal-check"></i> Reconhecida pelo MEC desde 2008
+        </div>
+        <h1 class="display-1 hero-title animate-fade-up delay-2">
+          Excelência Global<br>
+          <span class="text-red">em Educação.</span>
+        </h1>
+        <p class="hero-subtitle animate-fade-up delay-3">
+          Fundada em 2002, a Unifuturo conecta estudantes do mundo inteiro a uma educação de qualidade, com presença em 11 estados brasileiros, EUA e Europa.
+        </p>
+        <div class="hero-actions animate-fade-up delay-4">
+          <a href="vestibular.html" class="btn btn-primary btn-lg">
+            Comece sua jornada <i class="ph ph-arrow-right arrow"></i>
+          </a>
+          <a href="cursos.html" class="btn btn-outline btn-lg">Ver cursos</a>
+        </div>
+      </div>
+      <div class="hero-stats animate-fade-up delay-5">
+        <div class="hero-stat">
+          <span class="stat-n">50<span class="plus">+</span></span>
+          <span class="stat-l">Cursos</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="stat-n">11</span>
+          <span class="stat-l">Estados</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="stat-n">15</span>
+          <span class="stat-l">NPGs</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="stat-n">2002</span>
+          <span class="stat-l">Fundação</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll"><i class="ph ph-arrow-down"></i></div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header center animate-fade-up">
+        <span class="label">Por que escolher a Unifuturo?</span>
+        <div class="divider"></div>
+        <h2>Uma universidade sem fronteiras</h2>
+        <p>Combinamos rigor acadêmico com visão global, preparando você para os desafios do mundo moderno.</p>
+      </div>
+      <div class="grid-4">
+        <div class="feature-card animate-fade-up delay-1">
+          <div class="feature-icon"><i class="ph ph-seal-check"></i></div>
+          <h4>Reconhecimento MEC</h4>
+          <p>Credenciada pelo Ministério da Educação do Brasil desde 2008, garantindo qualidade e legalidade em todos os cursos.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-2">
+          <div class="feature-icon"><i class="ph ph-broadcast"></i></div>
+          <h4>EAD para o Mundo</h4>
+          <p>Aulas híbridas ao vivo que alcançam estudantes em qualquer lugar do planeta com a plataforma UniConect.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-3">
+          <div class="feature-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+          <h4>Bolsas Internacionais</h4>
+          <p>O Programa ABQUALIS oferece oportunidades reais de estudo e intercâmbio em parceiros europeus e americanos.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-4">
+          <div class="feature-icon"><i class="ph ph-buildings"></i></div>
+          <h4>Campi Internacionais</h4>
+          <p>Presença em Portugal, Alemanha, Polônia e EUA — sua carreira não conhece fronteiras geográficas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div class="container">
+      <div class="about-split">
+        <div class="about-image animate-fade-up">
+          <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80" alt="Alunos Unifuturo">
+          <div class="about-float">
+            <i class="ph ph-star-four"></i> Plataforma UniConect
+          </div>
+        </div>
+        <div class="about-text animate-fade-up delay-2">
+          <span class="label">Nossa Missão</span>
+          <div class="divider"></div>
+          <h2>Educar para uma cultura de diálogo e cooperação</h2>
+          <p style="margin-top:16px;">Fundada em 2002, em Portugal, a Unifuturo chegou ao Brasil em 2008 com uma visão clara: a educação deve ser acessível, internacional e transformadora. Restaurar a dignidade humana como valor central é o que nos move.</p>
+          <p style="margin-top:14px;">Hoje, operamos em 11 estados brasileiros, com 15 Núcleos de Pesquisa e Graduação (NPGs) e parcerias acadêmicas em Portugal, Alemanha, Polônia e EUA.</p>
+          <a href="sobre.html" class="btn btn-outline-dark mt-32">
+            Conheça nossa história <i class="ph ph-arrow-right arrow"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED COURSES -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header flex-between">
+        <div>
+          <span class="label">Catálogo Acadêmico</span>
+          <div class="divider"></div>
+          <h2>Cursos em Destaque</h2>
+        </div>
+        <a href="cursos.html" class="btn btn-outline-dark">Ver todos <i class="ph ph-arrow-right arrow"></i></a>
+      </div>
+      <div class="grid-3">
+        <article class="card animate-fade-up delay-1">
+          <div class="course-img-wrap">
+            <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80" alt="Enfermagem">
+            <span class="card-tag">Pós-Graduação</span>
+          </div>
+          <div class="card-body">
+            <h3>Enfermagem em Emergência e UTI</h3>
+            <p style="color:var(--text-secondary);font-size:14.5px;line-height:1.65;margin-top:8px;">Especialização voltada para atuação em ambientes hospitalares críticos, com foco em urgência e cuidados intensivos.</p>
+            <div class="course-meta">
+              <span><i class="ph ph-clock"></i> 18 meses</span>
+              <span><i class="ph ph-broadcast"></i> EAD Híbrido</span>
+            </div>
+            <a href="#checkout" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:18px;">
+              Inscreva-se <i class="ph ph-arrow-right arrow"></i>
+            </a>
+          </div>
+        </article>
+        <article class="card animate-fade-up delay-2">
+          <div class="course-img-wrap">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" alt="Ciências Contábeis">
+            <span class="card-tag">Graduação</span>
+          </div>
+          <div class="card-body">
+            <h3>Bacharelado em Ciências Contábeis</h3>
+            <p style="color:var(--text-secondary);font-size:14.5px;line-height:1.65;margin-top:8px;">Formação completa para atuar no mercado financeiro e contábil, com currículo alinhado às demandas globais.</p>
+            <div class="course-meta">
+              <span><i class="ph ph-clock"></i> 4 anos</span>
+              <span><i class="ph ph-broadcast"></i> EAD Híbrido</span>
+            </div>
+            <a href="#checkout" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:18px;">
+              Inscreva-se <i class="ph ph-arrow-right arrow"></i>
+            </a>
+          </div>
+        </article>
+        <article class="card animate-fade-up delay-3">
+          <div class="course-img-wrap">
+            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" alt="Serviço Social">
+            <span class="card-tag">Graduação</span>
+          </div>
+          <div class="card-body">
+            <h3>Bacharelado em Serviço Social</h3>
+            <p style="color:var(--text-secondary);font-size:14.5px;line-height:1.65;margin-top:8px;">Formação humanista, crítica e voltada para intervenção em contextos sociais complexos e transformação social.</p>
+            <div class="course-meta">
+              <span><i class="ph ph-clock"></i> 4 anos</span>
+              <span><i class="ph ph-broadcast"></i> EAD Híbrido</span>
+            </div>
+            <a href="#checkout" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:18px;">
+              Inscreva-se <i class="ph ph-arrow-right arrow"></i>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-bar-grid">
+        <div class="stats-bar-item">
+          <div class="n">50<span>+</span></div>
+          <div class="lbl">Cursos disponíveis</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="n">11</div>
+          <div class="lbl">Estados no Brasil</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="n">15</div>
+          <div class="lbl">Centros NPG</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="n">4</div>
+          <div class="lbl">Países com campi</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="n">2002</div>
+          <div class="lbl">Ano de fundação</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header flex-between">
+        <div>
+          <span class="label">Sala de Imprensa</span>
+          <div class="divider"></div>
+          <h2>Últimas Notícias</h2>
+        </div>
+        <a href="sobre.html#imprensa" class="btn btn-outline-dark">Ver todas <i class="ph ph-arrow-right arrow"></i></a>
+      </div>
+      <div class="grid-3">
+        <article class="news-card animate-fade-up delay-1">
+          <div class="news-img-wrap">
+            <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80" alt="Notícia">
+            <span class="news-date">Mar 2026</span>
+          </div>
+          <div class="news-body">
+            <span class="card-tag">Parceria</span>
+            <h4>UFCG recebe CAPES, FCU e Unifuturo em Campina Grande</h4>
+            <p>Reunião estratégica reforça os laços acadêmicos entre instituições brasileiras e internacionais.</p>
+            <a href="#" class="news-link">Leia mais <i class="ph ph-arrow-right"></i></a>
+          </div>
+        </article>
+        <article class="news-card animate-fade-up delay-2">
+          <div class="news-img-wrap">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80" alt="Notícia">
+            <span class="news-date">Mar 2026</span>
+          </div>
+          <div class="news-body">
+            <span class="card-tag">Internacional</span>
+            <h4>Reitor da FCU (EUA) e CAPES visitam NPG em Natal</h4>
+            <p>Visita fortalece o programa de bolsas internacionais ABQUALIS para alunos brasileiros.</p>
+            <a href="#" class="news-link">Leia mais <i class="ph ph-arrow-right"></i></a>
+          </div>
+        </article>
+        <article class="news-card animate-fade-up delay-3">
+          <div class="news-img-wrap">
+            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80" alt="Notícia">
+            <span class="news-date">Fev 2026</span>
+          </div>
+          <div class="news-body">
+            <span class="card-tag">Evento</span>
+            <h4>V Intereducation em destaque na reitoria da UFPB</h4>
+            <p>Evento consolida a Unifuturo como protagonista no cenário educacional do Nordeste brasileiro.</p>
+            <a href="#" class="news-link">Leia mais <i class="ph ph-arrow-right"></i></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORM -->
+  <section class="platform-sec">
+    <div class="container">
+      <div class="platform-inner">
+        <div class="animate-fade-up">
+          <span class="label" style="color:rgba(255,255,255,0.45)">Tecnologia Educacional</span>
+          <div class="divider"></div>
+          <h2 class="text-white">Conheça a Plataforma UniConect</h2>
+          <p>A primeira plataforma híbrida interativa com aulas síncronas para cursos de graduação e pós-graduação do Brasil. Estude de onde você estiver.</p>
+          <div class="platform-features">
+            <div class="pf-item"><i class="ph ph-check-circle"></i> Aulas ao vivo com interação em tempo real</div>
+            <div class="pf-item"><i class="ph ph-check-circle"></i> Gravações disponíveis 24h após a aula</div>
+            <div class="pf-item"><i class="ph ph-check-circle"></i> Tutores e suporte acadêmico dedicado</div>
+            <div class="pf-item"><i class="ph ph-check-circle"></i> Acesso via desktop, tablet e smartphone</div>
+          </div>
+          <a href="vestibular.html" class="btn btn-primary mt-32">
+            Começar agora <i class="ph ph-arrow-right arrow"></i>
+          </a>
+        </div>
+        <div class="platform-visual animate-fade-up delay-3">
+          <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=700&q=80" alt="UniConect Platform">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-strip">
+    <div class="container cta-inner animate-fade-up">
+      <div>
+        <h2>Seja um Aluno Unifuturo!</h2>
+        <p>Junte-se à nossa comunidade e internacionalize sua carreira.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="vestibular.html" class="btn btn-dark btn-lg">
+          Inscrições Limitadas — Inscreva-se <i class="ph ph-arrow-right arrow"></i>
+        </a>
+        <a href="contato.html" class="btn btn-outline btn-lg">Fale conosco</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <div class="logo-tagline">UNIVERSITY EXPERIENCE</div>
+        <p>Educando para uma cultura de diálogo e cooperação, com presença em 11 estados brasileiros e 4 países.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="#" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Institucional</h5>
+        <ul>
+          <li><a href="sobre.html#institucional">Sobre a Unifuturo</a></li>
+          <li><a href="sobre.html#estrutura">Estrutura Organizacional</a></li>
+          <li><a href="sobre.html#imprensa">Sala de Imprensa</a></li>
+          <li><a href="#">Ouvidoria</a></li>
+          <li><a href="#">UNIO Internacional</a></li>
+          <li><a href="#">e-MEC</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Acadêmico</h5>
+        <ul>
+          <li><a href="cursos.html#graduacao">Graduação</a></li>
+          <li><a href="cursos.html#posgraduacao">Pós-Graduação</a></li>
+          <li><a href="cursos.html#extensao">Extensão Universitária</a></li>
+          <li><a href="cursos.html#preparatorios">Preparatórios</a></li>
+          <li><a href="vestibular.html">Vestibular</a></li>
+          <li><a href="biblioteca.html">Biblioteca Virtual</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contato</h5>
+        <div class="footer-contact-item">
+          <i class="ph ph-map-pin icon"></i>
+          <span>Shopping Tambiá, Piso E2, João Pessoa – PB</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ph ph-phone icon"></i>
+          <span>+55 (83) 9 9691.9526</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ph ph-envelope icon"></i>
+          <span>secretaria@unifuturo.edu.br</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ph ph-envelope icon"></i>
+          <span>comercial@unifuturo.edu.br</span>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2008–2026 Unifuturo Faculdades. Todos os direitos reservados.</span>
+      <span>Credenciada pelo MEC · Verifique no e-MEC</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+    if (window.scrollY > 20) nav.classList.add('scrolled');
+
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle?.addEventListener('click', () => links?.classList.toggle('mobile-open'));
+
+    // Mobile dropdown toggle
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (window.innerWidth <= 900) {
+          item.classList.toggle('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

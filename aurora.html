@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Aurora | UNIXP – University Experience</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.0.3/src/index.js" defer></script>
+  <style>
+    /* ── AURORA HERO ── */
+    .aurora-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: var(--nav-height);
+      overflow: hidden;
+      background: #050510;
+    }
+    .aurora-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 40%, rgba(212,43,43,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 60%, rgba(212,43,43,0.14) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 10%, rgba(180,20,20,0.10) 0%, transparent 40%);
+    }
+    .aurora-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.018'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .aurora-hero-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      gap: 80px; align-items: center;
+      padding: 80px var(--container-px);
+      max-width: calc(var(--container-max) + var(--container-px)*2);
+      margin: 0 auto; width: 100%;
+    }
+    .aurora-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 8px 18px; border-radius: 100px;
+      border: 1px solid rgba(212,43,43,0.4);
+      background: rgba(212,43,43,0.08);
+      color: rgba(255,255,255,0.85); font-size: 12.5px; font-weight: 600;
+      margin-bottom: 28px; letter-spacing: 0.04em;
+    }
+    .aurora-eyebrow i { color: var(--red); font-size: 15px; }
+    .aurora-tagline {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(36px, 4.5vw, 60px); color: var(--white);
+      line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 12px;
+    }
+    .aurora-tagline span { color: var(--red); }
+    .aurora-subtitle-big {
+      font-family: var(--font-display); font-size: clamp(14px, 1.5vw, 18px);
+      color: rgba(255,255,255,0.45); letter-spacing: 0.04em; margin-bottom: 24px;
+      font-weight: 400;
+    }
+    .aurora-hero-desc {
+      color: rgba(255,255,255,0.6); font-size: 16px; line-height: 1.75;
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .aurora-hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .aurora-hero-img {
+      border-radius: var(--radius-xl); overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      position: relative;
+    }
+    .aurora-hero-img img { width: 100%; height: 480px; object-fit: cover; }
+    .aurora-hero-img::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(212,43,43,0.15) 0%, transparent 60%);
+      z-index: 1;
+    }
+    .aurora-hero-badge {
+      position: absolute; bottom: 24px; left: 24px; z-index: 2;
+      background: rgba(12,12,21,0.9); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 14px 20px;
+      color: var(--white);
+    }
+    .aurora-hero-badge .quote {
+      font-style: italic; font-size: 14px; color: rgba(255,255,255,0.75);
+      line-height: 1.5; margin-bottom: 6px;
+    }
+    .aurora-hero-badge .author { font-size: 12px; color: var(--red); font-weight: 700; letter-spacing: 0.04em; }
+
+    /* ── VISION / MISSION ── */
+    .vm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .vm-card {
+      border-radius: var(--radius-xl); padding: 40px;
+      position: relative; overflow: hidden;
+    }
+    .vm-card.dark { background: var(--dark-3); border: 1px solid rgba(255,255,255,0.07); }
+    .vm-card.red { background: var(--red); }
+    .vm-card::before {
+      content: ''; position: absolute; right: -40px; bottom: -40px;
+      width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .vm-card i { font-size: 32px; margin-bottom: 20px; display: block; }
+    .vm-card.dark i { color: var(--red); }
+    .vm-card.red i { color: rgba(255,255,255,0.8); }
+    .vm-card h3 { font-size: 22px; margin-bottom: 14px; }
+    .vm-card.dark h3 { color: var(--white); }
+    .vm-card.red h3 { color: var(--white); }
+    .vm-card p { font-size: 15.5px; line-height: 1.75; }
+    .vm-card.dark p { color: rgba(255,255,255,0.6); }
+    .vm-card.red p { color: rgba(255,255,255,0.85); }
+
+    /* ── PARTNERS ── */
+    .partners-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .partner-card {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl); padding: 36px 28px; text-align: center;
+      transition: var(--transition); position: relative; overflow: hidden;
+    }
+    .partner-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: var(--red);
+    }
+    .partner-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .partner-flag-big { font-size: 52px; margin-bottom: 16px; display: block; }
+    .partner-card h4 { font-size: 20px; margin-bottom: 6px; }
+    .partner-card .role {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 14px; font-family: var(--font-display);
+    }
+    .partner-card p { font-size: 14.5px; color: var(--text-secondary); line-height: 1.65; }
+
+    /* ── PILLAR SECTIONS ── */
+    .pillar {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center; margin-bottom: 96px;
+    }
+    .pillar.reverse { direction: rtl; }
+    .pillar.reverse > * { direction: ltr; }
+    .pillar-img { border-radius: var(--radius-xl); overflow: hidden; position: relative; }
+    .pillar-img img { width: 100%; height: 420px; object-fit: cover; }
+    .pillar-num {
+      position: absolute; top: 20px; left: 20px;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 72px; color: rgba(255,255,255,0.08);
+      line-height: 1; user-select: none;
+    }
+    .pillar-img-overlay {
+      position: absolute; bottom: 20px; right: 20px;
+      background: var(--red); color: var(--white);
+      padding: 10px 18px; border-radius: var(--radius);
+      font-size: 13px; font-weight: 700; font-family: var(--font-display);
+      letter-spacing: 0.04em;
+    }
+    .pillar-content .pillar-number {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 80px; color: rgba(212,43,43,0.12);
+      line-height: 1; margin-bottom: -16px; letter-spacing: -0.02em;
+    }
+    .pillar-content h2 { margin-bottom: 16px; }
+    .pillar-content p { color: var(--text-secondary); font-size: 16px; line-height: 1.75; }
+    .pillar-features { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+    .pillar-feat {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px; background: var(--gray-50);
+      border: 1px solid var(--gray-200); border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .pillar-feat:hover { border-color: var(--red); background: var(--red-muted); }
+    .pillar-feat i { color: var(--red); font-size: 20px; margin-top: 1px; flex-shrink: 0; }
+    .pillar-feat-text strong { font-size: 14.5px; display: block; margin-bottom: 3px; }
+    .pillar-feat-text span { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── PHASES ── */
+    .phases-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .phase-card {
+      border-radius: var(--radius-xl); padding: 36px 28px;
+      position: relative; overflow: hidden; transition: var(--transition);
+    }
+    .phase-card:hover { transform: translateY(-4px); }
+    .phase-card.p1 { background: var(--dark-2); border: 1px solid rgba(255,255,255,0.07); }
+    .phase-card.p2 { background: var(--red); }
+    .phase-card.p3 { background: var(--dark-3); border: 1px solid rgba(255,255,255,0.07); }
+    .phase-card::after {
+      content: ''; position: absolute; right: -30px; bottom: -30px;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .phase-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      font-family: var(--font-display); margin-bottom: 8px;
+    }
+    .phase-card.p1 .phase-label { color: var(--red); }
+    .phase-card.p2 .phase-label { color: rgba(255,255,255,0.7); }
+    .phase-card.p3 .phase-label { color: var(--red); }
+    .phase-card h4 { font-size: 22px; margin-bottom: 16px; color: var(--white); }
+    .phase-card p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.6); }
+    .phase-card.p2 p { color: rgba(255,255,255,0.85); }
+    .phase-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .phase-list li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13.5px; color: rgba(255,255,255,0.65);
+    }
+    .phase-list li i { color: var(--red); font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+    .phase-card.p2 .phase-list li { color: rgba(255,255,255,0.9); }
+    .phase-card.p2 .phase-list li i { color: rgba(255,255,255,0.7); }
+
+    /* ── AAG MANIFESTO ── */
+    .manifesto-sec {
+      background: var(--dark); padding: var(--section-py) 0;
+      position: relative; overflow: hidden;
+    }
+    .manifesto-sec::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(212,43,43,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(212,43,43,0.06) 0%, transparent 40%);
+    }
+    .manifesto-inner { position: relative; z-index: 1; text-align: center; max-width: 800px; margin: 0 auto; }
+    .manifesto-inner blockquote {
+      font-family: var(--font-display); font-size: clamp(24px, 3.5vw, 42px);
+      font-weight: 700; color: var(--white); line-height: 1.25;
+      margin: 24px 0; letter-spacing: -0.01em;
+    }
+    .manifesto-inner blockquote span { color: var(--red); }
+    .manifesto-inner .author {
+      font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em;
+      text-transform: uppercase; font-family: var(--font-display); font-weight: 600;
+    }
+
+    /* ── CTA AURORA ── */
+    .aurora-cta {
+      background: var(--red); padding: 80px 0; position: relative; overflow: hidden;
+    }
+    .aurora-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 10% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 90% 50%, rgba(0,0,0,0.15) 0%, transparent 60%);
+    }
+    .aurora-cta-inner {
+      position: relative; z-index: 1; text-align: center; max-width: 640px; margin: 0 auto;
+    }
+    .aurora-cta-inner h2 { color: var(--white); font-size: clamp(24px, 3vw, 38px); margin-bottom: 16px; }
+    .aurora-cta-inner p { color: rgba(255,255,255,0.8); font-size: 17px; margin-bottom: 36px; line-height: 1.7; }
+    .aurora-cta-inner .actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    @media (max-width: 1024px) {
+      .aurora-hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .aurora-hero-img { display: none; }
+      .pillar { grid-template-columns: 1fr; gap: 40px; }
+      .pillar.reverse { direction: ltr; }
+      .pillar-img img { height: 280px; }
+      .phases-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .vm-grid { grid-template-columns: 1fr; }
+      .partners-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="mainNav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <span class="logo-tagline">University Experience</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+        <li class="nav-item">
+          <a href="sobre.html" class="nav-link">Sobre <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="sobre.html#institucional">Institucional</a>
+            <a href="sobre.html#estrutura">Estrutura Organizacional</a>
+            <a href="sobre.html#imprensa">Sala de Imprensa</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="cursos.html" class="nav-link">Cursos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="cursos.html#graduacao">Graduação</a>
+            <a href="cursos.html#posgraduacao">Pós-Graduação</a>
+            <a href="cursos.html#extensao">Extensão Universitária</a>
+            <a href="cursos.html#preparatorios">Preparatórios</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="vestibular.html" class="nav-link">Vestibular <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="vestibular.html#inscricao">Inscrição</a>
+            <a href="vestibular.html#formas">Formas de Ingresso</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="biblioteca.html" class="nav-link">Biblioteca</a></li>
+        <li class="nav-item">
+          <a href="multimidia.html" class="nav-link">Multimídia <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="multimidia.html#anais">Anais de Congresso</a>
+            <a href="multimidia.html#revista">Revista EDUCERE</a>
+            <a href="multimidia.html#repositorio">Repositório Científico</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Acessos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="https://unifuturo.edu.br/virtual_novo/login.php" target="_blank" rel="noopener">Área do Aluno</a>
+            <a href="https://unifuturo.edu.br/candidato/" target="_blank" rel="noopener">Área do Candidato</a>
+            <a href="https://acadmais.unifuturo.edu.br/sys/public/" target="_blank" rel="noopener">Área do Professor</a>
+            <a href="https://pesf.com.br/estudanteVirtual/login.php" target="_blank" rel="noopener">PESF</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="aurora.html" class="nav-link active">Projeto Aurora</a></li>
+        <li class="nav-item"><a href="contato.html" class="nav-link">Contato</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="vestibular.html" class="btn btn-primary btn-sm">Inscreva-se</a>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="aurora-hero">
+    <div class="aurora-hero-inner">
+      <div>
+        <div class="aurora-eyebrow animate-fade-up">
+          <i class="ph ph-star-four"></i> UniXP · NGCU · ABQUALIS
+        </div>
+        <div class="aurora-subtitle-big animate-fade-up delay-1">Uma ponte para o saber universal</div>
+        <h1 class="aurora-tagline animate-fade-up delay-2">
+          Aurora<br>Académica<br><span>Global</span>
+        </h1>
+        <p class="aurora-hero-desc animate-fade-up delay-3">
+          Uma aliança estratégica entre a UniXP (Brasil), a NGCU (Suíça) e a ABQUALIS (EUA) para democratizar o conhecimento de alta qualidade e redefinir a forma como o saber é produzido, disseminado e certificado.
+        </p>
+        <div class="aurora-hero-actions animate-fade-up delay-4">
+          <a href="#pilares" class="btn btn-primary btn-lg">
+            Descobrir os pilares <i class="ph ph-arrow-down arrow"></i>
+          </a>
+          <a href="contato.html" class="btn btn-outline btn-lg">Fale conosco</a>
+        </div>
+      </div>
+      <div class="aurora-hero-img animate-fade-up delay-3">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Aurora Académica Global">
+        <div class="aurora-hero-badge">
+          <div class="quote">"Conhecimento sem fronteiras.<br>Futuros sem limites."</div>
+          <div class="author">— Ricardo Monteiro, 2026</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION & MISSION -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header center animate-fade-up" style="margin-bottom:40px;">
+        <span class="label" style="color:rgba(255,255,255,.45)">Propósito</span>
+        <div class="divider"></div>
+        <h2 class="text-white">Visão & Missão</h2>
+      </div>
+      <div class="vm-grid">
+        <div class="vm-card dark animate-fade-up delay-1">
+          <i class="ph ph-eye"></i>
+          <h3>Visão</h3>
+          <p>Ser a vanguarda global na democratização do conhecimento de alta qualidade, inspirando mentes e conectando culturas através de inovações pedagógicas e científicas.</p>
+        </div>
+        <div class="vm-card red animate-fade-up delay-2">
+          <i class="ph ph-target"></i>
+          <h3>Missão</h3>
+          <p>Promover o intercâmbio intelectual e o desenvolvimento profissional contínuo, oferecendo publicações científicas de ponta, conteúdo educacional multilingue imersivo e eventos acadêmicos internacionais certificados, em parceria estratégica com líderes mundiais em educação.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header center animate-fade-up">
+        <span class="label">Aliança Estratégica</span>
+        <div class="divider"></div>
+        <h2>Os Três Pilares da Parceria</h2>
+        <p>Uma sinergia única entre excelência suíça, inovação brasileira e alcance global americano.</p>
+      </div>
+      <div class="partners-grid">
+        <div class="partner-card animate-fade-up delay-1">
+          <span class="partner-flag-big">🇧🇷</span>
+          <h4>UniXP</h4>
+          <div class="role">Líder & Inovadora</div>
+          <p>Gestão estratégica do projeto, desenvolvimento de conteúdo original (Educere, livros, cursos), infraestrutura tecnológica e marketing para o mercado nacional.</p>
+        </div>
+        <div class="partner-card animate-fade-up delay-2">
+          <span class="partner-flag-big">🇨🇭</span>
+          <h4>NGCU</h4>
+          <div class="role">Excelência Acadêmica Global</div>
+          <p>Endosso e certificação acadêmica para congressos e workshops. Participação no conselho editorial da Educere, conferindo prestígio europeu e reconhecimento global.</p>
+        </div>
+        <div class="partner-card animate-fade-up delay-3">
+          <span class="partner-flag-big">🇺🇸</span>
+          <h4>ABQUALIS</h4>
+          <div class="role">Conexão & Qualidade Mundial</div>
+          <p>Estratégias de marketing internacional, gestão de parcerias tecnológicas, captação de palestrantes globais e garantia de conformidade com padrões internacionais.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE 3 PILLARS -->
+  <section class="section" id="pilares">
+    <div class="container">
+      <div class="section-header center animate-fade-up">
+        <span class="label">Os Pilares da Transformação</span>
+        <div class="divider"></div>
+        <h2>Três iniciativas que vão redefinir a educação</h2>
+        <p>Cada pilar representa uma ruptura com o modelo convencional de produção e disseminação do conhecimento.</p>
+      </div>
+
+      <!-- PILLAR 1 -->
+      <div class="pillar">
+        <div class="pillar-img animate-fade-up">
+          <div class="pillar-num">01</div>
+          <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=700&q=80" alt="Publicações Científicas">
+          <div class="pillar-img-overlay">Edição Científica</div>
+        </div>
+        <div class="pillar-content animate-fade-up delay-2">
+          <div class="pillar-number">01</div>
+          <span class="label">Pilar 1</span>
+          <div class="divider"></div>
+          <h2>Publicações Científicas:<br>A Voz da Inovação Global</h2>
+          <p>Aprimoramento e internacionalização da Revista EDUCERE e lançamento de uma coleção de Livros Científicos Bilíngues (Português/Inglês, Português/Espanhol), transformando a UniXP num hub de publicação de pesquisa de vanguarda com validação da NGCU.</p>
+          <div class="pillar-features">
+            <div class="pillar-feat">
+              <i class="ph ph-book-open"></i>
+              <div class="pillar-feat-text">
+                <strong>Revista EDUCERE Internacional</strong>
+                <span>Peer-reviewed, integrada ao Scopus, Web of Science e Google Scholar</span>
+              </div>
+            </div>
+            <div class="pillar-feat">
+              <i class="ph ph-books"></i>
+              <div class="pillar-feat-text">
+                <strong>Livros Científicos Bilíngues</strong>
+                <span>Coleção em Português/Inglês e Português/Espanhol, disponíveis em e-book e impresso</span>
+              </div>
+            </div>
+            <div class="pillar-feat">
+              <i class="ph ph-globe"></i>
+              <div class="pillar-feat-text">
+                <strong>Portal Aurora Académica Global</strong>
+                <span>Vitrine elegante para acesso e descoberta de todas as publicações</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 2 -->
+      <div class="pillar reverse">
+        <div class="pillar-img animate-fade-up">
+          <div class="pillar-num">02</div>
+          <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=700&q=80" alt="Imersão Multilíngue">
+          <div class="pillar-img-overlay">Imersão Multilíngue</div>
+        </div>
+        <div class="pillar-content animate-fade-up delay-2">
+          <div class="pillar-number">02</div>
+          <span class="label">Pilar 2</span>
+          <div class="divider"></div>
+          <h2>Imersão Multilíngue:<br>A Voz Global dos Mestres</h2>
+          <p>Tradução e dublagem com sincronia labial (Lip-Sync) por IA dos cursos de Augusto Cury e ZionOnline para espanhol e inglês. Uma imersão cultural que transcende barreiras linguísticas com a mesma força e autenticidade do idioma original.</p>
+          <div class="pillar-features">
+            <div class="pillar-feat">
+              <i class="ph ph-film-strip"></i>
+              <div class="pillar-feat-text">
+                <strong>Dublagem com Lip-Sync por IA</strong>
+                <span>Tecnologia de ponta para sincronia labial perfeita em espanhol e inglês</span>
+              </div>
+            </div>
+            <div class="pillar-feat">
+              <i class="ph ph-monitor-play"></i>
+              <div class="pillar-feat-text">
+                <strong>Plataforma "Aurora Learning"</strong>
+                <span>Streaming 4K, multi-áudio, legendas selecionáveis e certificação UniXP</span>
+              </div>
+            </div>
+            <div class="pillar-feat">
+              <i class="ph ph-device-mobile"></i>
+              <div class="pillar-feat-text">
+                <strong>Distribuição Global</strong>
+                <span>Integração com Coursera, Udemy Business e edX via ABQUALIS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 3 -->
+      <div class="pillar">
+        <div class="pillar-img animate-fade-up">
+          <div class="pillar-num">03</div>
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=700&q=80" alt="Fóruns Acadêmicos">
+          <div class="pillar-img-overlay">Fóruns Acadêmicos</div>
+        </div>
+        <div class="pillar-content animate-fade-up delay-2">
+          <div class="pillar-number">03</div>
+          <span class="label">Pilar 3</span>
+          <div class="divider"></div>
+          <h2>Fóruns Académicos:<br>O Palco dos Diálogos do Futuro</h2>
+          <p>Congressos, seminários e workshops internacionais com certificação universitária NGCU, em português, inglês e espanhol. Eventos híbridos que atraem líderes de pensamento, pesquisadores e profissionais de todo o mundo.</p>
+          <div class="pillar-features">
+            <div class="pillar-feat">
+              <i class="ph ph-certificate"></i>
+              <div class="pillar-feat-text">
+                <strong>Certificação UniXP / NGCU</strong>
+                <span>Chancela suíça conferindo reconhecimento internacional a cada participante</span>
+              </div>
+            </div>
+            <div class="pillar-feat">
+              <i class="ph ph-video-camera"></i>
+              <div class="pillar-feat-text">
+                <strong>Plataforma "Aurora Connect"</strong>
+                <span>Salas virtuais com tradução simultânea e networking por IA</span>
+              </div>
+            </div>
+            <div class="pillar-feat">
+              <i class="ph ph-map-trifold"></i>
+              <div class="pillar-feat-text">
+                <strong>Eventos em 3 continentes</strong>
+                <span>Locais de prestígio no Brasil, Europa e Américas com suporte da ABQUALIS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPLEMENTATION PHASES -->
+  <section class="section" style="background:var(--dark-2);">
+    <div class="container">
+      <div class="section-header center animate-fade-up">
+        <span class="label" style="color:rgba(255,255,255,.45)">Plano de Implementação</span>
+        <div class="divider"></div>
+        <h2 class="text-white">Rumo à excelência global</h2>
+        <p style="color:rgba(255,255,255,.5);">Três fases estratégicas para consolidar a Aurora Académica Global como referência mundial.</p>
+      </div>
+      <div class="phases-grid">
+        <div class="phase-card p1 animate-fade-up delay-1">
+          <div class="phase-label">Fase 1 · Meses 1–6</div>
+          <h4>Fundamentação & Pilotagem</h4>
+          <ul class="phase-list">
+            <li><i class="ph ph-check"></i> Consolidação legal das parcerias (MOUs com NGCU e ABQUALIS)</li>
+            <li><i class="ph ph-check"></i> Lançamento oficial da marca Aurora Académica Global</li>
+            <li><i class="ph ph-check"></i> Revisão editorial da Educere e seleção dos primeiros livros bilíngues</li>
+            <li><i class="ph ph-check"></i> Contratação de parceiro para tecnologia de lip-sync</li>
+            <li><i class="ph ph-check"></i> Planejamento do primeiro Seminário Internacional Aurora Connect</li>
+          </ul>
+        </div>
+        <div class="phase-card p2 animate-fade-up delay-2">
+          <div class="phase-label">Fase 2 · Meses 7–18</div>
+          <h4>Lançamento & Expansão</h4>
+          <ul class="phase-list">
+            <li><i class="ph ph-check"></i> Lançamento das edições bilíngues da Educere e dos primeiros livros</li>
+            <li><i class="ph ph-check"></i> Estreia dos cursos com lip-sync para mercados hispânicos e anglófonos</li>
+            <li><i class="ph ph-check"></i> Realização do primeiro evento internacional Aurora Connect</li>
+            <li><i class="ph ph-check"></i> Campanha global de lançamento da marca</li>
+            <li><i class="ph ph-check"></i> Expansão das equipes de marketing e suporte tecnológico</li>
+          </ul>
+        </div>
+        <div class="phase-card p3 animate-fade-up delay-3">
+          <div class="phase-label">Fase 3 · Meses 19+</div>
+          <h4>Otimização & Sustentabilidade</h4>
+          <ul class="phase-list">
+            <li><i class="ph ph-check"></i> Expansão contínua do catálogo de publicações e cursos</li>
+            <li><i class="ph ph-check"></i> Análise constante de métricas e feedback dos usuários</li>
+            <li><i class="ph ph-check"></i> Investimento em IA para personalização do aprendizado</li>
+            <li><i class="ph ph-check"></i> Realidade aumentada em eventos presenciais</li>
+            <li><i class="ph ph-check"></i> Novas parcerias académicas e corporativas globais</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto-sec">
+    <div class="container">
+      <div class="manifesto-inner animate-fade-up">
+        <span class="label" style="color:rgba(255,255,255,.4)">Por que seremos incomparáveis</span>
+        <blockquote>
+          "Excelência suíça com<br>
+          <span>vigor brasileiro.</span><br>
+          Acessibilidade sem<br>precedentes."
+        </blockquote>
+        <p style="color:rgba(255,255,255,.5);font-size:16px;line-height:1.75;margin:24px 0 32px;">
+          A Aurora Académica Global não é apenas um conjunto de serviços — é uma promessa de conhecimento que rompe barreiras linguísticas e geográficas, com a revolução da sincronia labial, certificações que abrem portas em qualquer lugar do mundo e uma comunidade vibrante onde mentes se conectam e o futuro é moldado juntos.
+        </p>
+        <div class="author">Ricardo Monteiro · Fundador UniXP · 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="aurora-cta">
+    <div class="container aurora-cta-inner animate-fade-up">
+      <h2>Faça parte da Aurora Académica Global</h2>
+      <p>Entre em contato e descubra como sua instituição, pesquisa ou carreira pode fazer parte deste projeto que está redefinindo o horizonte da educação mundial.</p>
+      <div class="actions">
+        <a href="contato.html" class="btn btn-dark btn-lg">
+          Fale conosco <i class="ph ph-arrow-right arrow"></i>
+        </a>
+        <a href="vestibular.html" class="btn btn-outline btn-lg">Conheça nossos cursos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <div class="logo-tagline">UNIVERSITY EXPERIENCE</div>
+        <p>Educando para uma cultura de diálogo e cooperação, com presença em 11 estados brasileiros e 4 países.</p>
+        <div class="footer-social">
+          <a href="#"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="#"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Projeto Aurora</h5>
+        <ul>
+          <li><a href="#pilares">Os 3 Pilares</a></li>
+          <li><a href="multimidia.html#revista">Revista EDUCERE</a></li>
+          <li><a href="multimidia.html#anais">Anais de Congresso</a></li>
+          <li><a href="contato.html">Parcerias</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Acadêmico</h5>
+        <ul>
+          <li><a href="cursos.html">Cursos</a></li>
+          <li><a href="vestibular.html">Vestibular</a></li>
+          <li><a href="biblioteca.html">Biblioteca</a></li>
+          <li><a href="multimidia.html">Multimídia</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contato</h5>
+        <div class="footer-contact-item"><i class="ph ph-map-pin icon"></i><span>Shopping Tambiá, Piso E2, João Pessoa – PB</span></div>
+        <div class="footer-contact-item"><i class="ph ph-phone icon"></i><span>+55 (83) 9 9691.9526</span></div>
+        <div class="footer-contact-item"><i class="ph ph-envelope icon"></i><span>secretaria@unifuturo.edu.br</span></div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2008–2026 Unifuturo Faculdades. Todos os direitos reservados.</span>
+      <span>Credenciada pelo MEC · Verifique no e-MEC</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+    if (window.scrollY > 20) nav.classList.add('scrolled');
+    document.getElementById('navToggle')?.addEventListener('click', () =>
+      document.getElementById('navLinks')?.classList.toggle('mobile-open'));
+  </script>
+</body>
+</html>
