@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIO – International Office | UNIXP – University Experience</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.0.3/src/index.js"></script>
+  <style>
+    .unio-intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .unio-intro-img {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+    }
+    .unio-intro-img img { width: 100%; height: 460px; object-fit: cover; }
+    .unio-intro-img .badge-overlay {
+      position: absolute; bottom: 24px; left: 24px;
+      background: rgba(12,12,21,0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      color: var(--white);
+    }
+    .badge-overlay i { color: var(--red); font-size: 22px; }
+    .badge-overlay .b-text { font-size: 13px; font-weight: 500; }
+    .badge-overlay .b-date { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s var(--ease);
+    }
+    .service-card:hover { box-shadow: var(--shadow-lg); border-color: var(--gray-300); transform: translateY(-3px); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon {
+      width: 50px; height: 50px; border-radius: var(--radius);
+      background: var(--red-muted); color: var(--red); font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+    .service-card h4 { font-size: 17px; margin-bottom: 10px; }
+    .service-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    .countries-strip {
+      background: var(--dark-2);
+      padding: 64px 0;
+    }
+    .countries-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap; margin-top: 36px;
+    }
+    .country-item {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0.65; transition: opacity 0.25s;
+    }
+    .country-item:hover { opacity: 1; }
+    .country-flag { font-size: 44px; }
+    .country-name {
+      font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,.55);
+    }
+
+    .contact-dark-card {
+      background: var(--dark-3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+    }
+    .contact-dark-card h4 { color: var(--white); font-size: 20px; margin-bottom: 20px; }
+    .contact-dark-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 15px;
+    }
+    .contact-dark-item:last-of-type { border-bottom: none; }
+    .contact-dark-item i { color: var(--red); font-size: 20px; flex-shrink: 0; }
+    .contact-dark-item a { color: rgba(255,255,255,.75); text-decoration: none; }
+    .contact-dark-item a:hover { color: var(--white); }
+    .contact-dark-item span { color: rgba(255,255,255,.75); }
+
+    .isp-box {
+      background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 100%);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    .isp-box::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(255,255,255,.07);
+    }
+    .isp-box h3 { font-size: clamp(20px,2.5vw,28px); margin-bottom: 12px; position: relative; }
+    .isp-box p { color: rgba(255,255,255,.8); font-size: 15.5px; line-height: 1.7; margin-bottom: 24px; position: relative; }
+    .isp-box .btn { position: relative; }
+
+    @media (max-width: 768px) {
+      .unio-intro-grid { grid-template-columns: 1fr; gap: 40px; }
+      .unio-intro-img img { height: 280px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .countries-row { gap: 28px; }
+      .isp-box { padding: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="topbar-links">
+        <a href="ouvidoria.html" class="topbar-link">Ouvidoria</a>
+        <a href="unio.html" class="topbar-link">UNIO</a>
+        <a href="https://emec.mec.gov.br/emec/consulta-cadastro/detalhamento/d96957f455f6405d14c6542552b0f6eb/NDIwMQ==" target="_blank" rel="noopener" class="topbar-link mec-link">MEC</a>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-phone">+55 (83) 9 9691.9526</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav scrolled" id="mainNav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <span class="logo-tagline">University Experience</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+        <li class="nav-item">
+          <a href="sobre.html" class="nav-link">Sobre <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="sobre.html#institucional">Institucional</a>
+            <a href="sobre.html#estrutura">Estrutura Organizacional</a>
+            <a href="sobre.html#imprensa">Sala de Imprensa</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="cursos.html" class="nav-link">Cursos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="cursos.html#graduacao">Graduação</a>
+            <a href="cursos.html#posgraduacao">Pós-Graduação</a>
+            <a href="cursos.html#extensao">Extensão Universitária</a>
+            <a href="cursos.html#preparatorios">Preparatórios</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="vestibular.html" class="nav-link">Vestibular <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="vestibular.html#inscricao">Inscrição</a>
+            <a href="vestibular.html#formas">Formas de Ingresso</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="biblioteca.html" class="nav-link">Biblioteca</a></li>
+        <li class="nav-item">
+          <a href="multimidia.html" class="nav-link">Multimídia <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="multimidia.html#anais">Anais de Congresso</a>
+            <a href="multimidia.html#revista">Revista EDUCERE</a>
+            <a href="multimidia.html#repositorio">Repositório Científico</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Acessos <i class="ph ph-caret-down chevron"></i></a>
+          <div class="nav-dropdown">
+            <a href="https://unifuturo.edu.br/virtual_novo/login.php" target="_blank" rel="noopener">Área do Aluno</a>
+            <a href="https://unifuturo.edu.br/candidato/" target="_blank" rel="noopener">Área do Candidato</a>
+            <a href="https://acadmais.unifuturo.edu.br/sys/public/" target="_blank" rel="noopener">Área do Professor</a>
+            <a href="https://pesf.com.br/estudanteVirtual/login.php" target="_blank" rel="noopener">PESF</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="aurora.html" class="nav-link">Projeto Aurora</a></li>
+        <li class="nav-item"><a href="contato.html" class="nav-link">Contato</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="vestibular.html" class="btn btn-primary btn-sm">Inscreva-se</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb animate-fade-in">
+        <a href="index.html">Início</a>
+        <span class="sep"><i class="ph ph-caret-right"></i></span>
+        <span>UNIO</span>
+      </div>
+      <h1 class="animate-fade-up delay-1">UNIO – <span class="text-red">International Office</span></h1>
+      <p class="animate-fade-up delay-2">O escritório de internacionalização da UNIXP: sua ponte para universidades, bolsas e oportunidades acadêmicas em todo o mundo.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="section">
+    <div class="container">
+      <div class="unio-intro-grid">
+        <div class="unio-intro-img animate-fade-up">
+          <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80" alt="Internacionalização UNIXP">
+          <div class="badge-overlay">
+            <i class="ph ph-globe-hemisphere-west"></i>
+            <div>
+              <div class="b-text">Criado em 2020</div>
+              <div class="b-date">Apoiando estudantes em 4 continentes</div>
+            </div>
+          </div>
+        </div>
+        <div class="animate-fade-up delay-2">
+          <span class="label">Sobre o UNIO</span>
+          <div class="divider"></div>
+          <h2>A sua conexão com o mundo acadêmico global</h2>
+          <p style="color:var(--text-secondary);font-size:16px;line-height:1.75;margin:16px 0;">
+            Criado em 2 de janeiro de 2020, o <strong>UNIO – UNIXP International Office</strong> surgiu para dar suporte ao crescente número de alunos de pós-graduação que buscam formação em universidades estrangeiras, consolidando o sucesso do Programa Educação Sem Fronteiras.
+          </p>
+          <p style="color:var(--text-secondary);font-size:16px;line-height:1.75;margin:16px 0;">
+            O UNIO atua como ponte entre alunos, professores e instituições nacionais e internacionais, facilitando acordos de cooperação universitária, informações sobre bolsas e o relacionamento com agências governamentais na Europa e nos EUA.
+          </p>
+          <p style="color:var(--text-secondary);font-size:16px;line-height:1.75;margin:0 0 28px;">
+            Por meio do <strong>International Student Program (ISP)</strong>, conectamos estudantes a universidades parceiras no exterior, abrindo caminhos para uma carreira verdadeiramente sem fronteiras.
+          </p>
+          <a href="contato.html" class="btn btn-primary">Falar com o UNIO <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header center animate-fade-up">
+        <span class="label">Nossos Serviços</span>
+        <div class="divider"></div>
+        <h2>O que o UNIO oferece</h2>
+        <p>Suporte completo para sua jornada acadêmica internacional</p>
+      </div>
+      <div class="services-grid" style="margin-top:48px;">
+        <div class="service-card animate-fade-up">
+          <div class="service-icon"><i class="ph ph-airplane-takeoff"></i></div>
+          <h4>Intercâmbio Acadêmico</h4>
+          <p>Orientação sobre programas de intercâmbio em universidades parceiras na Europa, EUA e demais países com quem a UNIXP mantém convênios ativos.</p>
+        </div>
+        <div class="service-card animate-fade-up delay-1">
+          <div class="service-icon"><i class="ph ph-medal"></i></div>
+          <h4>Bolsas Internacionais</h4>
+          <p>Informações e suporte para candidatura a bolsas de estudo em programas nacionais e internacionais, incluindo CAPES, CNPq e agências europeias.</p>
+        </div>
+        <div class="service-card animate-fade-up delay-2">
+          <div class="service-icon"><i class="ph ph-handshake"></i></div>
+          <h4>Acordos de Cooperação</h4>
+          <p>Gestão de convênios institucionais com universidades estrangeiras para dupla-titulação, co-tutela de pesquisas e mobilidade docente e discente.</p>
+        </div>
+        <div class="service-card animate-fade-up">
+          <div class="service-icon"><i class="ph ph-identification-card"></i></div>
+          <h4>Visto e Documentação</h4>
+          <p>Orientação sobre vistos estudantis, documentos necessários para matrícula no exterior e apostilamentos, facilitando o processo burocrático.</p>
+        </div>
+        <div class="service-card animate-fade-up delay-1">
+          <div class="service-icon"><i class="ph ph-chalkboard-teacher"></i></div>
+          <h4>Mobilidade Docente</h4>
+          <p>Programas de visita e cooperação para professores interessados em pesquisa colaborativa e docência em instituições internacionais parceiras.</p>
+        </div>
+        <div class="service-card animate-fade-up delay-2">
+          <div class="service-icon"><i class="ph ph-translate"></i></div>
+          <h4>Suporte Cultural</h4>
+          <p>Orientação sobre adaptação cultural, idioma, moradia e vida no exterior para alunos que irão estudar fora do Brasil pela primeira vez.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTRIES -->
+  <div class="countries-strip">
+    <div class="container">
+      <div style="text-align:center;">
+        <span class="label">Presença Internacional</span>
+        <div class="divider" style="margin:0 auto;"></div>
+        <h2 style="color:var(--white);margin-top:12px;">Parcerias em 4 continentes</h2>
+        <p style="color:rgba(255,255,255,.5);font-size:15px;margin-top:8px;">Universidades parceiras com as quais facilitamos intercâmbios e bolsas</p>
+      </div>
+      <div class="countries-row">
+        <div class="country-item"><div class="country-flag">🇵🇹</div><div class="country-name">Portugal</div></div>
+        <div class="country-item"><div class="country-flag">🇩🇪</div><div class="country-name">Alemanha</div></div>
+        <div class="country-item"><div class="country-flag">🇨🇭</div><div class="country-name">Suíça</div></div>
+        <div class="country-item"><div class="country-flag">🇺🇸</div><div class="country-name">EUA</div></div>
+        <div class="country-item"><div class="country-flag">🇫🇷</div><div class="country-name">França</div></div>
+        <div class="country-item"><div class="country-flag">🇪🇸</div><div class="country-name">Espanha</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISP + CONTACT -->
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;">
+        <!-- ISP Box -->
+        <div class="isp-box animate-fade-up">
+          <h3>International Student Program (ISP)</h3>
+          <p>O ISP conecta diretamente alunos da UNIXP com universidades estrangeiras parceiras, oferecendo uma experiência acadêmica completa no exterior — desde a seleção até o retorno ao Brasil.</p>
+          <p>Desenvolvemos competências interculturais, proficiência em idiomas e uma rede de contatos globais que transforma carreiras.</p>
+          <a href="contato.html" class="btn btn-dark">Saber mais sobre o ISP <i class="ph ph-arrow-right arrow"></i></a>
+        </div>
+
+        <!-- Contact Card -->
+        <div class="contact-dark-card animate-fade-up delay-2">
+          <h4>Entre em contato com o UNIO</h4>
+          <div class="contact-dark-item">
+            <i class="ph ph-envelope-simple"></i>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">E-mail</div>
+              <a href="mailto:unio@unixp.edu.br">unio@unixp.edu.br</a>
+            </div>
+          </div>
+          <div class="contact-dark-item">
+            <i class="ph ph-phone"></i>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">Telefone</div>
+              <span>+55 83 9979.5889</span>
+            </div>
+          </div>
+          <div class="contact-dark-item">
+            <i class="ph ph-whatsapp-logo"></i>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">WhatsApp</div>
+              <a href="https://wa.me/5583996919526" target="_blank" rel="noopener">+55 83 9969.1952</a>
+            </div>
+          </div>
+          <div class="contact-dark-item">
+            <i class="ph ph-map-pin"></i>
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">Endereço</div>
+              <span>Shopping Tambiá, Piso E2 · Rua Dep. Odon Bezerra, 184 · Tambiá, João Pessoa – PB</span>
+            </div>
+          </div>
+          <div style="margin-top:24px;">
+            <a href="contato.html" class="btn btn-primary" style="width:100%;justify-content:center;">
+              Agendar atendimento <i class="ph ph-calendar-plus"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo-mark"><span class="logo-uni">uni</span><span class="logo-xp">xp</span></div>
+        <div class="logo-tagline">UNIVERSITY EXPERIENCE</div>
+        <p>Educando para uma cultura de diálogo e cooperação, com presença em 11 estados brasileiros e 4 países.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+          <a href="#" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Institucional</h5>
+        <ul>
+          <li><a href="sobre.html#institucional">Sobre a UNIXP</a></li>
+          <li><a href="sobre.html#estrutura">Estrutura Organizacional</a></li>
+          <li><a href="sobre.html#imprensa">Sala de Imprensa</a></li>
+          <li><a href="ouvidoria.html">Ouvidoria</a></li>
+          <li><a href="unio.html">UNIO Internacional</a></li>
+          <li><a href="https://emec.mec.gov.br/emec/consulta-cadastro/detalhamento/d96957f455f6405d14c6542552b0f6eb/NDIwMQ==" target="_blank" rel="noopener">e-MEC</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Acadêmico</h5>
+        <ul>
+          <li><a href="cursos.html#graduacao">Graduação</a></li>
+          <li><a href="cursos.html#posgraduacao">Pós-Graduação</a></li>
+          <li><a href="cursos.html#extensao">Extensão Universitária</a></li>
+          <li><a href="cursos.html#preparatorios">Preparatórios</a></li>
+          <li><a href="vestibular.html">Vestibular</a></li>
+          <li><a href="biblioteca.html">Biblioteca Virtual</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contato</h5>
+        <div class="footer-contact-item">
+          <i class="ph ph-map-pin icon"></i>
+          <span>Shopping Tambiá, Piso E2, João Pessoa – PB</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ph ph-phone icon"></i>
+          <span>+55 (83) 9 9691.9526</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ph ph-envelope icon"></i>
+          <span>secretaria@unixp.edu.br</span>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2008–2026 UNIXP - University Experience. Todos os direitos reservados.</span>
+      <span>Credenciada pelo MEC · Verifique no e-MEC</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle?.addEventListener('click', () => links?.classList.toggle('mobile-open'));
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          const dd = item.querySelector('.nav-dropdown');
+          if (dd) { e.preventDefault(); item.classList.toggle('open'); }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
